@@ -70,3 +70,125 @@ El sistema no reporto ningun warning ya que se el error ocurrio al momento de co
 
 ### Paso 2
 
+A-
+
+Las correcciones que primero notamos son las de sintaxis, ya que vemos que al subir el codigo, cpplint no tira ningun error. Luego otro problema que soluciona es la de agregar los includes de wordcopunter, que era lo que nos rompia el compilador en el paso 1.
+
+B-
+
+![Screenshot 2021-04-19 214854](https://user-images.githubusercontent.com/49823710/115320902-1b78e080-a159-11eb-9956-4013086c2a7f.png)
+
+
+C- 
+
+![Screenshot 2021-04-19 215027](https://user-images.githubusercontent.com/49823710/115321014-54b15080-a159-11eb-857d-e5944e79fb88.png)
+![Screenshot 2021-04-19 215036](https://user-images.githubusercontent.com/49823710/115321016-5549e700-a159-11eb-80b9-39d365d7db5d.png)
+
+
+error: unknown type name 'size_t' o 'FILE': Este error se debe a que no se importo la libreria que permite utilizar size_t o FILE(stddef.h - stdio.h).
+
+
+error: implicit declaration of function 'malloc': Este errir se debe a qye bi se incluyo la libreria que tiene a malloc.
+
+
+### Paso 3
+
+A-
+
+Los cambios que se realizaron fue la importacion de las librerias que faltaban en el codigo.
+
+
+B-
+
+![Screenshot 2021-04-19 220702](https://user-images.githubusercontent.com/49823710/115322075-9b07af00-a15b-11eb-8091-c7347bc758d1.png)
+
+undefined reference to "wordscounter_destroy": Este error se debe a que el "wordscounter_destroy" esta declarado en el .h pero no en el .c entonces cuando en el main se quiere usar este no esta definido.Es un error del compilador.
+
+
+### Paso 4
+
+A-
+Los cambios realizados en esta correcion es el agregado de la definicion del wordscounter_destroy que era lo que lanzaba error en el paso anterior.
+
+B-
+
+![Screenshot 2021-04-19 222423](https://user-images.githubusercontent.com/49823710/115323217-14a09c80-a15e-11eb-91cb-31e33baf29ef.png)
+![Screenshot 2021-04-19 222448](https://user-images.githubusercontent.com/49823710/115323219-15d1c980-a15e-11eb-8685-bc9e5f0b8ca6.png)
+
+ERRORES:
+
+1- 472 bytes in 1 blocks are still reachable in loss record 1 of 2 y
+2-  1,505 bytes in 215 blocks are definitely lost in loss record 2 of 2
+
+Estos errores se deben a que cuando uno pide memoria, una ves terminada de usar la misma se la debe liberar con free, al no hacer esto nos tira errores de perdida de memoria como los que vemos. Basta con solo hacer free para la memoria alocada y se arreglara el problema.
+
+C-
+
+![Screenshot 2021-04-19 223300](https://user-images.githubusercontent.com/49823710/115323852-3bab9e00-a15f-11eb-8ce9-95bcefd5a78d.png)
+
+
+memcpy_chk: buffer overflow detected ***: Este error se debe a que se le esta asignando a la variable que va a almacenar el nombre del archivo un espacio menor al que necesita, enconcesa al querer copiar algo de mayor tamanio a una variable de menor salta el buffer overflow.
+
+D-
+
+El error no se solucionaria con strncpy ya que lo que hace esta funcion es copiar los caracteres hasta la cantidad que se le pasa a copiar o hasta que llegue a un valor nulo, en este caso entonces tambien abria un buffer overflow, ya que denuievo se trataria de copiar 32 caracteres en una variable que se reservo 30.
+
+E-
+
+Buffer Overflow: Este error se muestra cuando se trata de copiar a un buffer datos que pasan la capacidad del mismo y entonces pisan memoria adyacente a este.
+
+Segmentation Fault: Este es un error que aparece cuando se trata de acceder a memoria que no nos pertenece. Esto puede ser cuando queremos acceder a memoria que no reservamos por ejemplo.
+
+
+### Paso 5
+
+A-
+
+Se agregaron la variable delim_words con todos los delimitadores que existe, y a la ves el input ahora se le pasa el argv directamente y no el filepath.
+
+B-
+
+Las pruebas fallaron debido a que se obtuvieron distintos resultados de los esperados.
+
+![Screenshot 2021-04-19 231048](https://user-images.githubusercontent.com/49823710/115326955-8380f400-a164-11eb-9266-e005382c0b99.png)
+
+
+C-
+
+![Screenshot from 2021-04-19 23-14-19](https://user-images.githubusercontent.com/49823710/115327284-073ae080-a165-11eb-947f-d92be59b0879.png)
+
+Como podemos ver el ultimo caracter es 00000004, el cual si lo pasamos de hexadecimal a caracter nos da que es basura.
+
+
+D-
+
+![Screenshot from 2021-04-19 23-22-42](https://user-images.githubusercontent.com/49823710/115327940-33a32c80-a166-11eb-8be3-2cb08e4c4006.png)
+
+Info functions: Devuelve las funciones que posee cada archivo en el programa.
+
+List ...: Este comando imprime por defecto 10 lineas de codigo y en el caso de pasarle una variable, imprime las 10 apartir de la variable recibvida.
+
+Break: Establece un ckeckpoint en la linea pasada como parametro.
+
+Run: Este comando corre el programa o en este caso el txt pasado.
+
+No se detuvo en el breakpoint debido a que al correr run se piso el mismo.
+
+
+### Paso 6
+
+A-
+
+Las diferencias que podemos encontrar son que se cambia la constante delim_words en ves de ser un array de caracteres ahora es un string. Tambien se agrega mas validaciones al leer el caracter y compararlo con distintos valores.
+
+B-
+
+![Screenshot 2021-04-19 234439](https://user-images.githubusercontent.com/49823710/115329846-4e2ad500-a169-11eb-848d-de1becc69667.png)
+![Screenshot 2021-04-19 234448](https://user-images.githubusercontent.com/49823710/115329849-4ec36b80-a169-11eb-8357-0800f9303485.png)
+
+
+C-
+
+![Screenshot from 2021-04-19 23-44-09](https://user-images.githubusercontent.com/49823710/115329896-600c7800-a169-11eb-9bb5-5707cb6e5be4.png)
+ 
+Aca podemos ver como la execucion del ultimo me redirecciona la salida del programa al archivo output_single_word.txt
